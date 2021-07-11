@@ -1,4 +1,4 @@
-package com.yzs.pojo;
+package com.yzs.crm.settings.pojo;
 
 import java.util.Objects;
 
