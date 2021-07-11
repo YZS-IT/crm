@@ -11,9 +11,7 @@ public class DateTimeUtil {
 
         Date date = new Date();
 
-        String dateStr = sdf.format(date);
-
-        return dateStr;
+        return sdf.format(date);
 
     }
 
