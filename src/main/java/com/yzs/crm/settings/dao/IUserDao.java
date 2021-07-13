@@ -12,4 +12,6 @@ public interface IUserDao {
 
     List<User> findAll();
 
+    User findByActAndPwd(String act, String pwd);
+
 }

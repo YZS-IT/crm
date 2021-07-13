@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--自定义类型转换器 驱动类-->
+<!--    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+<!--        <property name="converters">-->
+<!--            <set>-->
+<!--                <ref bean="customerDateConverter"/>-->
+<!--            </set>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+    <context:component-scan base-package="com.yzs.crm.settings.web.controller"/>
+
+    <!--将上面定义的转换器 放进注解驱动中-->
+<!--    <mvc:annotation-driven conversion-service="conversionService"/>-->
+    <mvc:annotation-driven />
+
+    <!--静态资源由SpringMVC本身的静态资源处理Servlet处理-->
+<!--    <mvc:resources location="/css/" mapping="/**/*.css"/>-->
+<!--    <mvc:resources location="/img/" mapping="/**/*.jpg"/>-->
+<!--    <mvc:resources location="/photo/" mapping="/**/*.jpg"/>-->
+<!--    <mvc:resources location="/img/" mapping="/**/*.png"/>-->
+<!--    <mvc:resources location="/photo/" mapping="/**/*.png"/>-->
+<!--    <mvc:resources location="/js/" mapping="/**/*.js"/>-->
+<!--    <mvc:resources location="/vendor/" mapping="/**"/>-->
+
+    <mvc:default-servlet-handler/>
+
+    <!--配置 视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="order" value="1"></property>
+    </bean>
+    <!--以下两个解析器先不声明,等控制器中对不同目录下的页面都确定了然后改目录下的页面后再声明-->
+<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+<!--        <property name="prefix" value="/WEB-INF/user/"/>-->
+<!--        <property name="suffix" value=".jsp"/>-->
+<!--        <property name="orders" value="2"></property>-->
+<!--    </bean>-->
+<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+<!--        <property name="prefix" value="/WEB-INF/admin"/>-->
+<!--        <property name="suffix" value=".jsp"/>-->
+<!--        <property name="orders" value="3"></property>-->
+<!--    </bean>-->
+
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/user/**"/>-->
+<!--            <mvc:exclude-mapping path="/user/login"/>-->
+<!--            <mvc:exclude-mapping path="/user/register"/>-->
+<!--            <bean class="com.yzs.handler.LoginHandlerInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/admin/**"/>-->
+<!--            <bean class="com.yzs.handler.AdminHandlerInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+
+
+</beans>
