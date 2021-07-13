@@ -10,7 +10,7 @@ public class User {
     private String loginPwd; //登录密码
     private String email; //用户邮箱
     private String expireTime; //失效时间 yyyy-MM-dd HH:mm:ss 19位
-    private String lockState; //账号状态 ,0锁定,1启用
+    private String lockState; //账号状态 ,0启用,1锁定
     private String deptno; //部门编号
     private String allowIps; //允许访问的IP地址
     private String createTime; //创建时间

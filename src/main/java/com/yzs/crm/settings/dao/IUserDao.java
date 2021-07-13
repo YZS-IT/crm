@@ -1,6 +1,7 @@
 package com.yzs.crm.settings.dao;
 
 import com.yzs.crm.settings.pojo.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,6 +13,6 @@ public interface IUserDao {
 
     List<User> findAll();
 
-    User findByActAndPwd(String act, String pwd);
+    User findByActAndPwd(@Param("loginAct") String loginAct, @Param("loginPwd") String loginPwd);
 
 }
