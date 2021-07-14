@@ -22,7 +22,7 @@ public class UserController {
     @Resource
     private IUserService userService;
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login.do",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> login(HttpServletRequest request,
                                     HttpSession session,

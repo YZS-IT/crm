@@ -25,7 +25,7 @@ public class IUserServiceImpl implements IUserService {
             throw new LoginException("账号已失效!");
         }else if(!"0".equals(user.getLockState())){
             throw new LoginException("账号被封禁中,请联系管理员!");
-        }else if(!user.getAllowIps().contains(loginIp)){
+        }else if(!(user.getAllowIps()==null||"".equals(user.getAllowIps()))&&!user.getAllowIps().contains(loginIp)){
             throw new LoginException("您的IP地址不允许登录!");
         }
         return user;

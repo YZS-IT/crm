@@ -12,7 +12,7 @@ public class User {
     private String expireTime; //失效时间 yyyy-MM-dd HH:mm:ss 19位
     private String lockState; //账号状态 ,0启用,1锁定
     private String deptno; //部门编号
-    private String allowIps; //允许访问的IP地址
+    private String allowIps; //允许访问的IP地址,当值为null或者""时, 表示任意IP地址都可以登录;当有多个IP地址时,用逗号隔开.
     private String createTime; //创建时间
     private String createBy; //创建人
     private String editTime; //修改时间
