@@ -13,11 +13,6 @@
 </head>
 <body>
 
-<input type="hidden" id="hidden-name"/>
-<input type="hidden" id="hidden-owner"/>
-<input type="hidden" id="hidden-startDate"/>
-<input type="hidden" id="hidden-endDate"/>
-
 <!-- 创建市场活动 的模态窗口 -->
 <div class="modal fade" id="createActivityModal" role="dialog">
     <div class="modal-dialog" role="document" style="width: 85%;">
@@ -253,15 +248,15 @@
 
     $(function(){
 
+        //页面加载完毕后出发第一个方法
+        //默认展开页表的第1页，每页展现6条记录
+        pageList(1,6);
+
         //当关闭 添加活动 的模态窗口时,清除已经输入的记录
         $("#cancelBtn").click(function (){
             $("#activityAddForm")[0].reset();
             $("#createActivityModal").modal("hide");
         })
-
-        //页面加载完毕后出发第一个方法
-        //默认展开页表的第1页，每页展现6条记录
-        pageList(1,6);
 
         //为日期输入框 设置 日期拾取器(这是bootstrap提供的一个插件(js/locale/css),直接用就行) :
         $(".time").datetimepicker({
@@ -272,6 +267,18 @@
             todayBtn: true,
             pickerPosition: "left",
         });
+
+        //为查询按钮绑定事件，出发pageList方法
+        $("#searchBtn").click(function (){
+            pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+        })
+
+        $("#qx").on("click",function (){
+            $("input[name=xz]").prop("checked",this.checked);
+        })
+        $("#activityBody").on("click",$("input[name=xz]"),function (){
+            $("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
+        })
 
         //为创建按钮绑定一个事件,打开添加操作的模态窗口
         $("#addBtn").click(function (){
@@ -384,63 +391,6 @@
 
         })
 
-        //为查询按钮绑定事件，出发pageList方法
-        $("#searchBtn").click(function (){
-            /*
-                点击查询按钮的时候，我们应该将搜索框中的信息保存起来，保存到隐藏域中
-
-            */
-            $("#hidden-name").val($.trim($("#search-name").val()));
-            $("#hidden-owner").val($.trim($("#search-owner").val()));
-            $("#hidden-startDate").val($.trim($("#search-startDate").val()));
-            $("#hidden-endDate").val($.trim($("#search-endDate").val()));
-
-            pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
-        })
-
-        $("#qx").on("click",function (){
-            $("input[name=xz]").prop("checked",this.checked);
-        })
-        $("#activityBody").on("click",$("input[name=xz]"),function (){
-            $("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
-        })
-
-        //为删除按钮绑定事件，执行市场活动删除操作
-        $("#deleteBtn").click(function (){
-            //找到复选框中所有挑√的复选框的jquery对象
-            var $xz = $("input[name=xz]:checked");
-            if ($xz.length==0){
-                alert("请选择要删除的记录")
-            }else{
-                if(confirm("确定要删除所选的记录吗？")){
-                    //拼接参数
-                    var param = "";
-                    var i
-                    //将$xz中的每一个dom对象遍历出来，取其value值相当于取得了需要删除记录的id
-                    for (i=0;i<$xz.length;i++){
-                        param += "id="+ $($xz[i]).val();
-                        if (i<$xz.length-1){
-                            param += "&";
-                        }
-                    }
-                    alert(param)
-                    $.post("workbench/activity/delete.do",param,function (data) {
-                        if (data.success){
-                            //删除成功后
-                            //刷新市场活动信息列表（局部刷新）
-                            var cur = $("#activityPage").bs_pagination('getOption', 'currentPage')
-                            var size = $("#activityPage").bs_pagination('getOption', 'rowsPerPage')
-                            var total = $("#activityPage").bs_pagination('getOption', 'totalRows')
-                            pageList(size*(cur-1)+i==total?cur-1:cur,size);
-                        }else {
-                            alert("删除市场活动失败")
-                        }
-                    })
-                }
-
-            }
-        })
-
         //为修改按钮绑定事件，打开修改操作的模态窗口
         $("#editBtn").click(function (){
 
@@ -500,6 +450,42 @@
                     alert("修改市场活动失败");
                 }
             })
+        })
+
+        //为删除按钮绑定事件，执行市场活动删除操作
+        $("#deleteBtn").click(function (){
+            //找到复选框中所有挑√的复选框的jquery对象
+            var $xz = $("input[name=xz]:checked");
+            if ($xz.length==0){
+                alert("请选择要删除的记录")
+            }else{
+                if(confirm("确定要删除所选的记录吗？")){
+                    //拼接参数
+                    var param = "";
+                    var i
+                    //将$xz中的每一个dom对象遍历出来，取其value值相当于取得了需要删除记录的id
+                    for (i=0;i<$xz.length;i++){
+                        param += "id="+ $($xz[i]).val();
+                        if (i<$xz.length-1){
+                            param += "&";
+                        }
+                    }
+                    alert(param)
+                    $.post("workbench/activity/delete.do",param,function (data) {
+                        if (data.success){
+                            //删除成功后
+                            //刷新市场活动信息列表（局部刷新）
+                            var cur = $("#activityPage").bs_pagination('getOption', 'currentPage')
+                            var size = $("#activityPage").bs_pagination('getOption', 'rowsPerPage')
+                            var total = $("#activityPage").bs_pagination('getOption', 'totalRows')
+                            pageList(size*(cur-1)+i==total?cur-1:cur,size);
+                        }else {
+                            alert("删除市场活动失败")
+                        }
+                    })
+                }
+
+            }
         })
 
     });
