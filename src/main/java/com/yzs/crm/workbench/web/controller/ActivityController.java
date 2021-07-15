@@ -98,6 +98,7 @@ public class ActivityController {
         Map<String, Object> map = new HashMap<>();
         map.put("success",flag);
         return map;
+
     }
 
     @RequestMapping("/delete.do")
