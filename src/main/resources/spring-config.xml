@@ -5,6 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="com.yzs.crm.settings.service"/>
+    <context:component-scan base-package="com.yzs.crm.workbench.service"/>
 
     <!--声明Druid数据源-->
     <!--需要用到Druid中提供的DruidDataSource类,它是用来创建Druid数据源对象的-->
@@ -38,7 +39,7 @@
             对象名字由Spring容器根据每个接口名字自动设置(接口名首字母小写),所以这个bean不需要id属性.
             多个包采用,或者;隔开
         -->
-        <property name="basePackage" value="com.yzs.crm.settings.dao"></property>
+        <property name="basePackage" value="com.yzs.crm.settings.dao;com.yzs.crm.workbench.dao"></property>
     </bean>
 
     <!--Spring的 自定义属性 配置文件,Spring中要指定文件位置需要加classpath-->

@@ -51,6 +51,11 @@
 	//启动执行函数
 	$(function (){
 
+		//因为本项目中存在子窗口页面(window.open),为了防止该登录页面被作为子窗口页面显示,加此语句.
+		if (window.top!=window){
+			window.top.location=window.location;
+		}
+
 		//页面加载完毕后，将用户文本框中的内容清空
 		$("#loginAct").val("");
 		//页面加载完毕后，让用户的文本框自动获得焦点
@@ -71,7 +76,7 @@
 		//获取账号和密码(去除首位空格)
 		var loginAct = $.trim($("#loginAct").val());
 		var loginPwd = $.trim($("#loginPwd").val());
-		//判断空
+		//判空
 		if (loginAct==""||loginPwd==""){
 			$("#msg").html("账号或密码不能为空");
 			return false;

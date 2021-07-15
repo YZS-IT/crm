@@ -12,6 +12,7 @@
 
 <!--    注解扫描器-->
     <context:component-scan base-package="com.yzs.crm.settings.web.controller"/>
+    <context:component-scan base-package="com.yzs.crm.workbench.web.controller"/>
 
 <!--    注解驱动器-->
     <mvc:annotation-driven />

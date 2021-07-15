@@ -9,6 +9,7 @@ import com.yzs.crm.util.MD5Util;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class IUserServiceImpl implements IUserService {
@@ -31,4 +32,8 @@ public class IUserServiceImpl implements IUserService {
         return user;
     }
 
+    @Override
+    public List<User> getUserList() {
+        return userDao.findAll();
+    }
 }

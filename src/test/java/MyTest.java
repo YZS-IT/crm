@@ -1,6 +1,7 @@
 import com.yzs.crm.settings.exception.LoginException;
 import com.yzs.crm.settings.service.IUserService;
 import com.yzs.crm.util.MD5Util;
+import com.yzs.crm.workbench.service.IActivityService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -13,11 +14,16 @@ public class MyTest {
         for (String beanDefinitionName : ac.getBeanDefinitionNames()) {
             System.out.println(beanDefinitionName);
         }
-        IUserService userService = (IUserService) ac.getBean("IUserServiceImpl");
-        try {
-            userService.login("zs","123","127.0.0.1");
-        } catch (LoginException e) {
-            e.printStackTrace();
-        }
+//        IUserService userService = (IUserService) ac.getBean("IUserServiceImpl");
+//        try {
+//            userService.login("zs","123","127.0.0.1");
+//        } catch (LoginException e) {
+//            e.printStackTrace();
+//        }
+
+        IActivityService activityService = (IActivityService) ac.getBean("IActivityServiceImpl");
+
+        activityService.findAll("三","","","");
+
     }
 }
