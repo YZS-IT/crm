@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzs.crm.workbench.dao.IClueRemarkDao">
+    <select id="findAll" resultType="com.yzs.crm.workbench.pojo.ClueRemark">
+        select * from tbl_clue_remark
+    </select>
+
+    <select id="findByClueId" resultType="com.yzs.crm.workbench.pojo.ClueRemark">
+        select * from tbl_clue_remark where clueId = #{clueId}
+        order by editTime desc,createTime desc
+    </select>
+
+    <select id="findById" resultType="com.yzs.crm.workbench.pojo.ClueRemark">
+        select * from tbl_clue_remark where id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into tbl_clue_remark(id,noteContent,createTime,createBy,clueId) values (#{id},#{noteContent},#{createTime},#{createBy},#{clueId})
+    </insert>
+
+    <delete id="delete">
+        delete from tbl_clue_remark where id = #{id}
+    </delete>
+
+    <update id="update">
+        update tbl_clue_remark set noteContent = #{noteContent},editTime = #{editTime},editBy = #{editBy},editFlag = #{editFlag}
+        where id = #{id}
+    </update>
+
+</mapper>

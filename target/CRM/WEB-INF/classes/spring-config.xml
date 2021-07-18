@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.yzs.crm.settings.service"/>
+    <context:component-scan base-package="com.yzs.crm.workbench.service"/>
+
+    <!--声明Druid数据源-->
+    <!--需要用到Druid中提供的DruidDataSource类,它是用来创建Druid数据源对象的-->
+    <bean id="myDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <!--set注入,给DruidDataSource对象的属性赋值-->
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.passwd}"></property>
+        <property name="maxActive" value="${jdbc.maxActive}"></property>
+    </bean>
+
+    <!--声明sqlSessionFactory对象,原SSF对象需要SSFB和MyBatis主配置文件-->
+    <!--需要用到MyBatis中提供的SqlSessionFactoryBean类,它是用来创建sqlSessionFactory对象的-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--需要属性dataSource-->
+        <property name="dataSource" ref="myDataSource"/>
+        <!--需要属性configLocation-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+
+    <!--声明dao对象,原dao对象需要sqlSession.getMapper(接口.class)-->
+    <!--需要用到MapperScannerConfigurer-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--需要属性sqlSeesionFactory,Mybatis采用了其BeanName来赋值,而不是用ref的形式传入对象-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" ></property>
+        <!--
+            需要属性markerInterface,它会扫描这个包中的所有接口,把每个接口都执行一次
+            getMapper()方法,得到每个接口的dao对象,然后把dao对象放在Spring容器中,
+            对象名字由Spring容器根据每个接口名字自动设置(接口名首字母小写),所以这个bean不需要id属性.
+            多个包采用,或者;隔开
+        -->
+        <property name="basePackage" value="com.yzs.crm.settings.dao;com.yzs.crm.workbench.dao"></property>
+    </bean>
+
+    <!--Spring的 自定义属性 配置文件,Spring中要指定文件位置需要加classpath-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+</beans>
