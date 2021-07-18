@@ -16,5 +16,6 @@ public interface IUserDao {
     List<User> findAll();
 
     User findByActAndPwd(@Param("loginAct") String loginAct, @Param("loginPwd") String loginPwd);
+    User findById(String id);
 
 }

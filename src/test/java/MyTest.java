@@ -1,6 +1,10 @@
 import com.yzs.crm.settings.exception.LoginException;
+import com.yzs.crm.settings.pojo.DicValue;
+import com.yzs.crm.settings.service.IDicService;
 import com.yzs.crm.settings.service.IUserService;
 import com.yzs.crm.util.MD5Util;
+import com.yzs.crm.util.UUIDUtil;
+import com.yzs.crm.workbench.dao.IClueDao;
 import com.yzs.crm.workbench.service.IActivityService;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -21,9 +25,23 @@ public class MyTest {
 //            e.printStackTrace();
 //        }
 
-        IActivityService activityService = (IActivityService) ac.getBean("IActivityServiceImpl");
+//        IActivityService activityService = (IActivityService) ac.getBean("IActivityServiceImpl");
 
-        activityService.findAll("三","","","");
+//        activityService.findAll("三","","","");
+
+//        activityService.findRemarkById("6430a2a1c38c487ba5f323c344ffdd11");
+
+//        IDicService dicService = (IDicService) ac.getBean("IDicServiceImpl");
+//        DicValue dicValue = new DicValue();
+//        dicValue.setId(UUIDUtil.getUUID());
+//        dicValue.setValue("40");
+//        dicValue.setText("40");
+//        dicValue.setOrderNo("0");
+//        dicValue.setTypeCode("pageSize");
+//        dicService.insert(dicValue);
+
+        IClueDao clueDao = (IClueDao) ac.getBean("IClueDao");
+        clueDao.findAll(null);
 
     }
 }

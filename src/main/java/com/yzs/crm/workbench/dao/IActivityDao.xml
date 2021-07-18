@@ -24,6 +24,7 @@
                 <![CDATA[AND endDate =< #{endDate}]]>
             </if>
         </where>
+        order by a.startDate desc,a.createTime desc
     </select>
 
     <select id="findByOwner" resultType="com.yzs.crm.workbench.pojo.Activity">
@@ -34,6 +35,11 @@
     <select id="findById" resultType="com.yzs.crm.workbench.pojo.Activity">
         select id,owner,name,startDate,endDate,cost,description,createTime,createBy,editTime,editBy from tbl_activity
         where id = #{id}
+    </select>
+
+    <select id="detail" resultType="com.yzs.crm.workbench.pojo.Activity">
+        <include refid="selectAll" />
+        where a.id = #{id}
     </select>
 
     <insert id="insert">

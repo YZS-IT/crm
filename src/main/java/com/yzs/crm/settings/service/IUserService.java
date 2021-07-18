@@ -8,4 +8,5 @@ import java.util.List;
 public interface IUserService {
     User login(String loginAct, String loginPwd, String loginIp) throws LoginException;
     List<User> getUserList();
+    User findById(String id);
 }

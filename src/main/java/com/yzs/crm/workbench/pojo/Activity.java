@@ -3,7 +3,7 @@ package com.yzs.crm.workbench.pojo;
 public class Activity {
 
     private String id; //主键
-    private String owner; //所有者(表中是ownerId,已经在Dao层通过联合查询转换成owner了.)
+    private String owner; //所有者
     private String name; //市场活动名称
     private String startDate; //开始日期 年月日
     private String endDate; //结束日期 年月日

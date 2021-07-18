@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>123</title>
+    <title></title>
     <base href="<%=basePath%>">
     <meta charset="UTF-8">
     <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
@@ -13,6 +13,12 @@
     <link href="jquery/bs_pagination/jquery.bs_pagination.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+
+<%--四个隐藏域存储条件查询的值--%>
+<input type="hidden" id="hidden-name">
+<input type="hidden" id="hidden-owner">
+<input type="hidden" id="hidden-startDate">
+<input type="hidden" id="hidden-endDate">
 
 <!-- 创建市场活动 的模态窗口 -->
 <div class="modal fade" id="createActivityModal" role="dialog">
@@ -271,12 +277,18 @@
 
         //为查询按钮绑定事件，出发pageList方法
         $("#searchBtn").click(function (){
+            $("#hidden-name").val($.trim($("#search-name").val()))
+            $("#hidden-owner").val($.trim($("#search-owner").val()))
+            $("#hidden-startDate").val($.trim($("#search-startDate").val()))
+            $("#hidden-endDate").val($.trim($("#search-endDate").val()))
             pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
         })
 
+        //给 全选/全不选 复选框 绑定事件
         $("#qx").on("click",function (){
             $("input[name=xz]").prop("checked",this.checked);
         })
+        //给动态生成的每条项目的复选框 绑定事件(需要找到动态生成的元素的真实父控件,使用on绑定事件)
         $("#activityBody").on("click",$("input[name=xz]"),function (){
             $("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
         })
@@ -430,6 +442,10 @@
 
         //给更新按钮添加点击事件
         $("#updateBtn").click(function (){
+            if ($.trim($("#edit-name").val())==""){
+                alert("活动名称不能为空!")
+                return
+            }
             $.post("workbench/activity/update.do",{
                 "id":$.trim($("#edit-id").val()),
                 "owner":$.trim($("#edit-owner").val()),
@@ -471,7 +487,6 @@
                             param += "&";
                         }
                     }
-                    alert(param)
                     $.post("workbench/activity/delete.do",param,function (data) {
                         if (data.success){
                             //删除成功后
@@ -507,10 +522,10 @@
         $.post("workbench/activity/findAll.do", {
             pageNum,
             pageSize,
-            "name":$.trim($("#search-name").val()),
-            "owner":$.trim($("#search-owner").val()),
-            "startDate":$.trim($("#search-startDate").val()),
-            "endDate":$.trim($("#search-endDate").val())
+            "name":$("#hidden-name").val(),
+            "owner":$("#hidden-owner").val(),
+            "startDate":$("#hidden-startDate").val(),
+            "endDate":$("#hidden-endDate").val()
         }, function (data) {
             var html = "";
             $.each(data.data,function (i,n){
@@ -528,7 +543,9 @@
             //计算总页数
             var totalPages = data.total%pageSize==0?data.total/pageSize:parseInt(data.total/pageSize)+1;
 
-            //为 分页功能栏目 设置分页插件bs_pagination(bootstrap提供的分页组件UI(背后还是后端在进行分页)):
+            //为 分页功能栏目 设置分页插件bs_pagination(bootstrap提供的分页组件UI(背后还是后端在进行分页));
+            //bootstrap_table 也提供了分页插件,在SSM-master-shop中的管理员-用户界面中有用到,也是只提供了分页组件UI,背后还是后端在进行分页;
+            //不过bootstrap_table是有可以进行前端分页的组件的.
             $("#activityPage").bs_pagination({
 
                 currentPage: pageNum, // 当前页码
@@ -550,6 +567,11 @@
 
             });
         })
+
+        $("#search-name").val( $("#hidden-name").val())
+        $("#search-owner").val( $("#hidden-owner").val())
+        $("#search-startDate").val( $("#hidden-startDate").val())
+        $("#search-endDate").val( $("#hidden-endDate").val())
 
     }
 

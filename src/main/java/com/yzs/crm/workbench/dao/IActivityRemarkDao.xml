@@ -4,11 +4,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yzs.crm.workbench.dao.IActivityRemarkDao">
     <select id="findAll" resultType="com.yzs.crm.workbench.pojo.ActivityRemark">
-        select * from tbl_activity
+        select * from tbl_activity_remark
     </select>
 
     <select id="findByActivityId" resultType="com.yzs.crm.workbench.pojo.ActivityRemark">
-        select * from tbl_activity where activityId = #{activityId}
+        select * from tbl_activity_remark where activityId = #{activityId}
+        order by editTime desc,createTime desc
     </select>
+
+    <select id="findById" resultType="com.yzs.crm.workbench.pojo.ActivityRemark">
+        select * from tbl_activity_remark where id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into tbl_activity_remark(id,noteContent,createTime,createBy,activityId) values (#{id},#{noteContent},#{createTime},#{createBy},#{activityId})
+    </insert>
+
+    <delete id="delete">
+        delete from tbl_activity_remark where id = #{id}
+    </delete>
+
+    <update id="update">
+        update tbl_activity_remark set noteContent = #{noteContent},editTime = #{editTime},editBy = #{editBy},editFlag = #{editFlag}
+        where id = #{id}
+    </update>
 
 </mapper>

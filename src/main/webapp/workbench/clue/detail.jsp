@@ -1,181 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/";
 %>
 <!DOCTYPE html>
 <html>
 <head>
-	<base href="<%=basePath%>">
+<base href="<%=basePath%>">
 <meta charset="UTF-8">
 
 <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-
-<script type="text/javascript">
-
-	//默认情况下取消和保存按钮是隐藏的
-	var cancelAndSaveBtnDefault = true;
-	
-	$(function(){
-		$("#remark").focus(function(){
-			if(cancelAndSaveBtnDefault){
-				//设置remarkDiv的高度为130px
-				$("#remarkDiv").css("height","130px");
-				//显示
-				$("#cancelAndSaveBtn").show("2000");
-				cancelAndSaveBtnDefault = false;
-			}
-		});
-		
-		$("#cancelBtn").click(function(){
-			//显示
-			$("#cancelAndSaveBtn").hide();
-			//设置remarkDiv的高度为130px
-			$("#remarkDiv").css("height","90px");
-			cancelAndSaveBtnDefault = true;
-		});
-		
-		$(".remarkDiv").mouseover(function(){
-			$(this).children("div").children("div").show();
-		});
-		
-		$(".remarkDiv").mouseout(function(){
-			$(this).children("div").children("div").hide();
-		});
-		
-		$(".myHref").mouseover(function(){
-			$(this).children("span").css("color","red");
-		});
-		
-		$(".myHref").mouseout(function(){
-			$(this).children("span").css("color","#E6E6E6");
-		});
-		//页面加载完毕后，取出关联的市场活动信息列表
-		showActivityList();
-        $("#aname").keydown(function (event){
-            if (event.keyCode==13){
-            	$.ajax({
-					url:"workbench/clue/getActivityListByNameAndNotByClueId.do",
-					data:{
-						"aname":$.trim($("#aname").val()),
-						"clueId":"${c.id}"
-					},
-					type:"get",
-					dataType:"json",
-					success:function (data){
-
-							var html = "";
-							$.each(data,function (i,n){
-								html += '<tr>'
-								html += '<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>'
-								html += '<td>'+n.name+'</td>'
-								html += '<td>'+n.startDate+'</td>'
-								html += '<td>'+n.endDate+'</td>'
-								html += '<td>'+n.owner+'</td>'
-								html += '</tr>'
-							})
-							$("#activitySearchBody").html(html);
-
-					}
-				})
-
-
-
-            	return false;
-            }
-        })
-		$("#bundBtn").click(function (){
-			var $xz = $("input[name=xz]:checked");
-			if ($xz.length==0){
-				alert("请选择需要关联的事件")
-			}else {
-				var param = "cid=${c.id}&";
-				for(var i=0;i<$xz.length;i++){
-					param += "aid="+$($xz[i]).val();
-					if (i<$xz.length-1){
-						param +='&';
-					}
-				}
-				$.ajax({
-					url:"workbench/clue/bund.do",
-					data:param,
-					type:"post",
-					dataType:"json",
-					success:function (data){
-
-						if (data.success){
-							//关联成功，刷新列表
-							showActivityList();
-							//清除搜索框中的内容
-							$("#aname").val("");
-							//清空列表
-							$("#activitySearchBody").html("");
-							//关闭模态窗口
-							$("#bundModal").modal("hide");
-						}else{
-							alert("关联事件失败")
-						}
-					}
-				})
-			}
-
-		})
-	});
-	function showActivityList(){
-
-		$.ajax({
-
-			url:"workbench/clue/getActivityListByClueId.do",
-			data:{
-				"clueId":"${c.id}"
-			},
-			type:"get",
-			dataType:"json",
-			success:function (data){
-				/*
-					data
-						[{市场活动1},{2},{3}]
-				 */
-				var html = "";
-				$.each(data,function (i,n){
-					html += '<tr>';
-					html += '<td>'+n.name+'</td>';
-					html += '<td>'+n.startDate+'</td>';
-					html += '<td>'+n.endDate+'</td>';
-					html += '<td>'+n.owner+'</td>';
-					html += '<td><a href="javascript:void(0);" onclick="unbund(\''+n.id+'\')" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
-					html += '</tr>';
-				})
-				$("#activityBody").html(html);
-			}
-		})
-	}
-	/*
-		id:我们想要一个关联关系表的id
-	 */
-	function unbund(id){
-		$.ajax({
-			url:"workbench/clue/unbund.do",
-			data:{
-				"id":id
-			},
-			type: "post",
-			dataType: "json",
-			success:function (data){
-				if (data.success){
-					//解除关联成功
-					//刷新关联的市场活动列表
-					showActivityList();
-				}else{
-					alert("解除关联失败")
-				}
-			}
-		})
-	}
-
-</script>
 
 </head>
 <body>
@@ -400,7 +233,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!-- 大标题 -->
 	<div style="position: relative; left: 40px; top: -30px;">
 		<div class="page-header">
-			<h3> <small>${c.company}</small></h3>
+			<h3>${c.company}<small>${c.fullname}${c.appellation}</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
 			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.jsp?id=${c.id}&fullname=${c.fullname}&appellation=${c.appellation}&company=${c.company}&owner=${c.owner}';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
@@ -575,8 +408,172 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 	</div>
-	
-	
 	<div style="height: 200px;"></div>
+
+<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	//默认情况下取消和保存按钮是隐藏的
+	var cancelAndSaveBtnDefault = true;
+
+	$(function(){
+		$("#remark").focus(function(){
+			if(cancelAndSaveBtnDefault){
+				//设置remarkDiv的高度为130px
+				$("#remarkDiv").css("height","130px");
+				//显示
+				$("#cancelAndSaveBtn").show("2000");
+				cancelAndSaveBtnDefault = false;
+			}
+		});
+
+		$("#cancelBtn").click(function(){
+			//显示
+			$("#cancelAndSaveBtn").hide();
+			//设置remarkDiv的高度为130px
+			$("#remarkDiv").css("height","90px");
+			cancelAndSaveBtnDefault = true;
+		});
+
+		$(".remarkDiv").mouseover(function(){
+			$(this).children("div").children("div").show();
+		});
+
+		$(".remarkDiv").mouseout(function(){
+			$(this).children("div").children("div").hide();
+		});
+
+		$(".myHref").mouseover(function(){
+			$(this).children("span").css("color","red");
+		});
+
+		$(".myHref").mouseout(function(){
+			$(this).children("span").css("color","#E6E6E6");
+		});
+		//页面加载完毕后，取出关联的市场活动信息列表
+		showActivityList();
+		$("#aname").keydown(function (event){
+			if (event.keyCode==13){
+				$.ajax({
+					url:"workbench/clue/getActivityListByNameAndNotByClueId.do",
+					data:{
+						"aname":$.trim($("#aname").val()),
+						"clueId":"${c.id}"
+					},
+					type:"get",
+					dataType:"json",
+					success:function (data){
+
+						var html = "";
+						$.each(data,function (i,n){
+							html += '<tr>'
+							html += '<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>'
+							html += '<td>'+n.name+'</td>'
+							html += '<td>'+n.startDate+'</td>'
+							html += '<td>'+n.endDate+'</td>'
+							html += '<td>'+n.owner+'</td>'
+							html += '</tr>'
+						})
+						$("#activitySearchBody").html(html);
+
+					}
+				})
+
+
+
+				return false;
+			}
+		})
+		$("#bundBtn").click(function (){
+			var $xz = $("input[name=xz]:checked");
+			if ($xz.length==0){
+				alert("请选择需要关联的事件")
+			}else {
+				var param = "cid=${c.id}&";
+				for(var i=0;i<$xz.length;i++){
+					param += "aid="+$($xz[i]).val();
+					if (i<$xz.length-1){
+						param +='&';
+					}
+				}
+				$.ajax({
+					url:"workbench/clue/bund.do",
+					data:param,
+					type:"post",
+					dataType:"json",
+					success:function (data){
+
+						if (data.success){
+							//关联成功，刷新列表
+							showActivityList();
+							//清除搜索框中的内容
+							$("#aname").val("");
+							//清空列表
+							$("#activitySearchBody").html("");
+							//关闭模态窗口
+							$("#bundModal").modal("hide");
+						}else{
+							alert("关联事件失败")
+						}
+					}
+				})
+			}
+
+		})
+	});
+	function showActivityList(){
+
+		$.ajax({
+
+			url:"workbench/clue/getActivityListByClueId.do",
+			data:{
+				"clueId":"${c.id}"
+			},
+			type:"get",
+			dataType:"json",
+			success:function (data){
+				/*
+					data
+						[{市场活动1},{2},{3}]
+				 */
+				var html = "";
+				$.each(data,function (i,n){
+					html += '<tr>';
+					html += '<td>'+n.name+'</td>';
+					html += '<td>'+n.startDate+'</td>';
+					html += '<td>'+n.endDate+'</td>';
+					html += '<td>'+n.owner+'</td>';
+					html += '<td><a href="javascript:void(0);" onclick="unbund(\''+n.id+'\')" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+					html += '</tr>';
+				})
+				$("#activityBody").html(html);
+			}
+		})
+	}
+	/*
+		id:我们想要一个关联关系表的id
+	 */
+	function unbund(id){
+		$.ajax({
+			url:"workbench/clue/unbund.do",
+			data:{
+				"id":id
+			},
+			type: "post",
+			dataType: "json",
+			success:function (data){
+				if (data.success){
+					//解除关联成功
+					//刷新关联的市场活动列表
+					showActivityList();
+				}else{
+					alert("解除关联失败")
+				}
+			}
+		})
+	}
+
+</script>
 </body>
 </html>

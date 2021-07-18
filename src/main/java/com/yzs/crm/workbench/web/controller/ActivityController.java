@@ -7,16 +7,16 @@ import com.yzs.crm.settings.service.IUserService;
 import com.yzs.crm.util.DateTimeUtil;
 import com.yzs.crm.util.UUIDUtil;
 import com.yzs.crm.workbench.pojo.Activity;
+import com.yzs.crm.workbench.pojo.ActivityRemark;
 import com.yzs.crm.workbench.service.IActivityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +91,7 @@ public class ActivityController {
         User user = (User) session.getAttribute("user");
 
         activity.setEditBy(user.getName());
-        activity.setCreateTime(DateTimeUtil.getSysTime());
+        activity.setEditTime(DateTimeUtil.getSysTime());
 
         boolean flag = activityService.update(activity);
 
@@ -107,6 +107,78 @@ public class ActivityController {
         boolean flag = activityService.delete(ids);
         Map<String, Object> map = new HashMap<>();
         map.put("success",flag);
+        return map;
+    }
+
+
+    @RequestMapping("/detail.do")
+    public ModelAndView detail(@RequestParam("id") String id,ModelAndView mv){
+        Activity activity = activityService.detail(id);
+        String activityOwner = userService.findById(activity.getOwner()).getName();
+        List<User> userList = userService.getUserList();
+        mv.addObject("a",activity);
+        mv.addObject("userList",userList);
+        mv.addObject("activityOwner",activityOwner);
+        mv.setViewName("forward:/workbench/activity/detail.jsp");
+        return mv;
+    }
+
+    @RequestMapping("/getRemarkList.do")
+    @ResponseBody
+    public List<ActivityRemark>  getRemarkList(@RequestParam("activityId") String activityId){
+        return activityService.getRemarkList(activityId);
+    }
+
+    @RequestMapping("/deleteRemark.do")
+    @ResponseBody
+    public Map<String, Object>  deleteRemark(@RequestParam("id") String id){
+        Map<String, Object> map = new HashMap<>();
+        boolean flag = activityService.deleteRemark(id);
+        map.put("success",flag);
+        return map;
+    }
+
+    @RequestMapping("/updateRemark.do")
+    @ResponseBody
+    public Map<String, Object>  updateRemark(@RequestParam("id") String id,
+                                             @RequestParam("noteContent") String noteContent,
+                                             HttpSession session){
+        Map<String, Object> map = new HashMap<>();
+
+        User user = (User) session.getAttribute("user");
+
+        ActivityRemark activityRemark = activityService.findRemarkById(id);
+
+        activityRemark.setEditFlag("1");
+        activityRemark.setNoteContent(noteContent);
+        activityRemark.setEditBy(user.getName());
+        activityRemark.setEditTime(DateTimeUtil.getSysTime());
+
+        boolean flag = activityService.updateRemark(activityRemark);
+
+        map.put("success",flag);
+        map.put("ar",activityRemark);
+        return map;
+    }
+
+
+    @RequestMapping("/saveRemark.do")
+    @ResponseBody
+    public Map<String, Object>  saveRemark(@RequestParam("noteContent") String noteContent,
+                                           @RequestParam("activityId") String activityId,
+                                           HttpSession session){
+        Map<String, Object> map = new HashMap<>();
+        User user = (User) session.getAttribute("user");
+        ActivityRemark activityRemark = new ActivityRemark();
+
+        activityRemark.setActivityId(activityId);
+        activityRemark.setNoteContent(noteContent);
+        activityRemark.setCreateBy(user.getName());
+        activityRemark.setCreateTime(DateTimeUtil.getSysTime());
+        activityRemark.setId(UUIDUtil.getUUID());
+        boolean flag = activityService.insertRemark(activityRemark);
+        map.put("success",flag);
+        map.put("ar",activityRemark);
         return map;
     }
 

@@ -36,4 +36,9 @@ public class IUserServiceImpl implements IUserService {
     public List<User> getUserList() {
         return userDao.findAll();
     }
+
+    @Override
+    public User findById(String id) {
+        return userDao.findById(id);
+    }
 }
