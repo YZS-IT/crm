@@ -182,4 +182,6 @@ public class Clue {
     public void setAddress(String address) {
         this.address = address;
     }
+
+
 }

@@ -1,4 +1,5 @@
 import com.yzs.crm.settings.exception.LoginException;
+import com.yzs.crm.settings.pojo.DicType;
 import com.yzs.crm.settings.pojo.DicValue;
 import com.yzs.crm.settings.service.IDicService;
 import com.yzs.crm.settings.service.IUserService;
@@ -40,8 +41,11 @@ public class MyTest {
 //        dicValue.setTypeCode("pageSize");
 //        dicService.insert(dicValue);
 
-        IClueDao clueDao = (IClueDao) ac.getBean("IClueDao");
-        clueDao.findAll(null);
+//        IClueDao clueDao = (IClueDao) ac.getBean("IClueDao");
+//        clueDao.findAll(null);
+
+        IDicService dicService = (IDicService) ac.getBean("IDicServiceImpl");
+
 
     }
 }

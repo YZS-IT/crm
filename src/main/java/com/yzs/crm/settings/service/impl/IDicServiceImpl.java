@@ -37,4 +37,63 @@ public class IDicServiceImpl implements IDicService {
     public boolean insert(DicValue dicValue) {
         return dicValueDao.insert(dicValue);
     }
+
+    @Override
+    public List<DicType> getTypeList() {
+        return dicTypeDao.findAll();
+    }
+
+    @Override
+    public List<DicValue> getValueList() {
+        return dicValueDao.findAll();
+    }
+
+    @Override
+    public DicType getTypeById(String id) {
+        return dicTypeDao.getTypeById(id);
+    }
+
+    @Override
+    public DicValue getValueById(String id) {
+        return dicValueDao.getValueById(id);
+    }
+
+    @Override
+    public boolean saveType(DicType dicType) {
+        return dicTypeDao.insert(dicType);
+    }
+
+
+    @Override
+    public boolean deleteType(List<String> ids) {
+        //防止删除表中全部数据
+        if(ids == null || ids.size() == 0){
+            return false;
+        }
+        return dicTypeDao.delete(ids);
+    }
+
+    @Override
+    public boolean updateType(DicType dicType) {
+        return dicTypeDao.update(dicType);
+    }
+
+    @Override
+    public boolean saveValue(DicValue dicValue) {
+        return dicValueDao.insert(dicValue);
+    }
+
+    @Override
+    public boolean deleteValue(List<String> ids) {
+        //防止删除表中全部数据
+        if(ids == null || ids.size() == 0){
+            return false;
+        }
+        return dicValueDao.delete(ids);
+    }
+
+    @Override
+    public boolean updateValue(DicValue dicValue) {
+        return dicValueDao.update(dicValue);
+    }
 }

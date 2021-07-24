@@ -1,6 +1,8 @@
 package com.yzs.crm.settings.pojo;
 
 public class DicType {
+
+    private String id;
     private String code;
     private String name;
     private String description;
@@ -27,5 +29,13 @@ public class DicType {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

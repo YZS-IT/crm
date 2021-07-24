@@ -113,7 +113,7 @@ public class ActivityController {
 
     @RequestMapping("/detail.do")
     public ModelAndView detail(@RequestParam("id") String id,ModelAndView mv){
-        Activity activity = activityService.detail(id);
+        Activity activity = activityService.getActivity(id);
         String activityOwner = userService.findById(activity.getOwner()).getName();
         List<User> userList = userService.getUserList();
         mv.addObject("a",activity);

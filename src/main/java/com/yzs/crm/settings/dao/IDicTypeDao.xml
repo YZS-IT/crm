@@ -7,4 +7,26 @@
         select * from tbl_dic_type
     </select>
 
+    <select id="getTypeById" resultType="com.yzs.crm.settings.pojo.DicType">
+        select * from tbl_dic_type where id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into tbl_dic_type(id,code,name,description) values (#{id},#{code},#{name},#{description})
+    </insert>
+
+    <delete id="delete">
+        delete from tbl_dic_type
+        <if test="list != null and list.size > 0">
+            where id in
+            <foreach collection="list" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <update id="update">
+        update tbl_dic_type set code = #{code}, name = #{name}, description = #{description} where id = #{id}
+    </update>
+
 </mapper>

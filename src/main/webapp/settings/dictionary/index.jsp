@@ -1,42 +1,14 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
+<base href="<%=basePath%>">
 <meta charset="UTF-8">
-<link href="../../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="../../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-
-	//页面加载完毕
-	$(function(){
-		
-		//导航中所有文本颜色为黑色
-		$(".liClass > a").css("color" , "black");
-		
-		//默认选中导航菜单中的第一个菜单项
-		$(".liClass:first").addClass("active");
-		
-		//第一个菜单项的文字变成白色
-		$(".liClass:first > a").css("color" , "white");
-		
-		//给所有的菜单项注册鼠标单击事件
-		$(".liClass").click(function(){
-			//移除所有菜单项的激活状态
-			$(".liClass").removeClass("active");
-			//导航中所有文本颜色为黑色
-			$(".liClass > a").css("color" , "black");
-			//当前项目被选中
-			$(this).addClass("active");
-			//当前项目颜色变成白色
-			$(this).children("a").css("color","white");
-		});
-		
-		//展示市场活动页面
-		window.open("type/index.html","workareaFrame");
-		
-	});
-	
-</script>
+<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 
 </head>
 <body>
@@ -104,7 +76,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='../../login.jsp';">更新</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='login.jsp';">更新</button>
 				</div>
 			</div>
 		</div>
@@ -125,7 +97,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='../../login.jsp';">确定</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='login.jsp';">确定</button>
 				</div>
 			</div>
 		</div>
@@ -137,12 +109,12 @@
 		<div style="position: absolute; top: 15px; right: 15px;">
 			<ul>
 				<li class="dropdown user-dropdown">
-					<a href="javascript:void(0)" style="text-decoration: none; color: white;" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-user"></span> zhangsan <span class="caret"></span>
+					<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none; color: white; ">
+						<span class="glyphicon glyphicon-user"></span>zhangsan<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../../workbench/index.jsp"><span class="glyphicon glyphicon-home"></span> 工作台</a></li>
-						<li><a href="../index.html"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>
+						<li><a href="workbench/index.jsp"><span class="glyphicon glyphicon-home"></span> 工作台</a></li>
+						<li><a href="settings/index.html"><span class="glyphicon glyphicon-home"></span> 系统设置</a></li>
 						<li><a href="javascript:void(0)" data-toggle="modal" data-target="#myInformation"><span class="glyphicon glyphicon-file"></span> 我的资料</a></li>
 						<li><a href="javascript:void(0)" data-toggle="modal" data-target="#editPwdModal"><span class="glyphicon glyphicon-edit"></span> 修改密码</a></li>
 						<li><a href="javascript:void(0);" data-toggle="modal" data-target="#exitModal"><span class="glyphicon glyphicon-off"></span> 退出</a></li>
@@ -159,8 +131,8 @@
 		<div id="navigation" style="left: 0px; width: 18%; position: relative; height: 100%; overflow:auto;">
 		
 			<ul id="no1" class="nav nav-pills nav-stacked">
-				<li class="liClass"><a href="type/index.html" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 字典类型</a></li>
-				<li class="liClass"><a href="value/index.html" target="workareaFrame"><span class="glyphicon glyphicon-list"></span> 字典值</a></li>
+				<li class="liClass"><a href="settings/dictionary/type/index.do" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 字典类型</a></li>
+				<li class="liClass"><a href="settings/dictionary/value/index.do" target="workareaFrame"><span class="glyphicon glyphicon-list"></span> 字典值</a></li>
 			</ul>
 			
 			<!-- 分割线 -->
@@ -180,4 +152,38 @@
 	<div id="down" style="height: 30px; width: 100%; position: absolute;bottom: 0px;"></div>
 	
 </body>
+
+<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	//页面加载完毕
+	$(function(){
+
+		//导航中所有文本颜色为黑色
+		$(".liClass > a").css("color" , "black");
+
+		//默认选中导航菜单中的第一个菜单项
+		$(".liClass:first").addClass("active");
+
+		//第一个菜单项的文字变成白色
+		$(".liClass:first > a").css("color" , "white");
+
+		//给所有的菜单项注册鼠标单击事件
+		$(".liClass").click(function(){
+			//移除所有菜单项的激活状态
+			$(".liClass").removeClass("active");
+			//导航中所有文本颜色为黑色
+			$(".liClass > a").css("color" , "black");
+			//当前项目被选中
+			$(this).addClass("active");
+			//当前项目颜色变成白色
+			$(this).children("a").css("color","white");
+		});
+
+		//展示市场活动页面
+		window.open("settings/dictionary/type/index.do","workareaFrame");
+	});
+
+</script>
 </html>

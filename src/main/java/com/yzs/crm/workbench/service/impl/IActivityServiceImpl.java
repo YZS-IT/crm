@@ -35,7 +35,7 @@ public class IActivityServiceImpl implements IActivityService {
 
     @Override
     public Activity detail(String id) {
-        return activityDao.findById(id);
+        return activityDao.detail(id);
     }
 
     @Override

@@ -17,4 +17,6 @@ public interface IActivityDao {
     boolean insert(Activity activity);
     boolean update(Activity activity);
     boolean delete(List<String> ids);
+
+    List<Activity> findLikeNameNotInRelation(@Param("name") String name, @Param("clueId") String clueId);
 }

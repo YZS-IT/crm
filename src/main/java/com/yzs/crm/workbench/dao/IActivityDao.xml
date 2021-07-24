@@ -62,4 +62,15 @@
         </if>
     </delete>
 
+    <select id="findLikeNameNotInRelation" resultType="com.yzs.crm.workbench.pojo.Activity">
+        <include refid="selectAll" />
+        <where>
+            <if test="name != null and name != ''">
+                <![CDATA[AND a.name LIKE '%' #{name} '%']]>
+            </if>
+            and a.id not in (select activityId from tbl_clue_activity_relation where clueId = #{clueId})
+        </where>
+        order by a.startDate desc,a.createTime desc
+    </select>
+
 </mapper>

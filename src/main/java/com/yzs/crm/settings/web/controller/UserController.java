@@ -41,4 +41,12 @@ public class UserController {
         return map;
     }
 
+    @RequestMapping(value = "/logout.do")
+    public String logout(HttpSession session){
+        Map<String,Object> map = new HashMap();
+        session.setAttribute("user",null);
+        map.put("success",true);
+        return "redirect:/login.jsp";
+    }
+
 }
