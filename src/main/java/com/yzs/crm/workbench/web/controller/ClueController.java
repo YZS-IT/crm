@@ -2,6 +2,7 @@ package com.yzs.crm.workbench.web.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.yzs.crm.settings.pojo.User;
 import com.yzs.crm.settings.service.IUserService;
 import com.yzs.crm.util.DateTimeUtil;
@@ -111,7 +112,7 @@ public class ClueController {
     @ResponseBody
     public Map<String, Object> getActivityListLikeName(String name, String clueId){
         Map<String, Object> map = new HashMap<>();
-        List<Activity> activityList = clueService.getActivityLikeNameAndNotBindedByClueId(name,clueId);
+        List<Activity> activityList = clueService.getActivityLikeNameAndNotBoundByClueId(name,clueId);
         map.put("data",activityList);
         return map;
     }
@@ -184,7 +185,8 @@ public class ClueController {
     @RequestMapping("/convertConfirm.do")
     public Map<String ,Object> convertConfirm(HttpSession session,
                                               @RequestParam("clueId") String clueId,
-                                              String tranMony, String tranName, String tranExpectedDate,String tranStage, String tranActivityId){
+                                              @RequestParam("flag") Boolean flag,
+                                              String tranMoney, String tranName, String tranExpectedDate,String tranStage, String tranActivityId){
 
         User user = (User)session.getAttribute("user");
         Map<String, Object> map = new HashMap<>();
@@ -201,6 +203,8 @@ public class ClueController {
         customer.setContactSummary(clue.getContactSummary());
         customer.setNextContactTime(clue.getNextContactTime());
         customer.setAddress(clue.getAddress());
+
+
         Contact contact = new Contact();
         contact.setId(UUIDUtil.getUUID());
         contact.setOwner(clue.getOwner());

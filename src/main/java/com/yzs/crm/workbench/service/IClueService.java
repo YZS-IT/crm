@@ -1,6 +1,7 @@
 package com.yzs.crm.workbench.service;
 
 import com.yzs.crm.workbench.bo.ClueValue;
+import com.yzs.crm.workbench.bo.TranValue;
 import com.yzs.crm.workbench.pojo.Activity;
 import com.yzs.crm.workbench.pojo.Clue;
 import com.yzs.crm.workbench.pojo.ClueActivityRelation;
@@ -19,7 +20,8 @@ public interface IClueService {
     List<ClueActivityRelation> getClueActivityRelationList(String id);
     boolean saveClueActivityRelation(ClueActivityRelation relation);
     boolean deleteClueActivityRelation(String id);
-    List<Activity> getActivityLikeNameAndNotBindedByClueId(String name, String clueId);
+    List<Activity> getActivityLikeNameAndNotBoundByClueId(String name, String clueId);
 
+    boolean convertConfirm(String clueId, TranValue tranValue, String createBy);
 
 }

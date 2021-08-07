@@ -1,6 +1,7 @@
 package com.yzs.crm.workbench.pojo;
 
 public class Contact {
+
     private String id;
     private String owner;
     private String source;
