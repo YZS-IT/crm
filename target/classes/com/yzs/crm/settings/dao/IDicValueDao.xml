@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzs.crm.settings.dao.IDicValueDao">
+    <select id="findByCode" resultType="com.yzs.crm.settings.pojo.DicValue">
+        select * from tbl_dic_value where typeCode = #{code} order by orderNo
+    </select>
+
+    <select id="findAll" resultType="com.yzs.crm.settings.pojo.DicValue">
+        select * from tbl_dic_value order by typeCode, orderNo
+    </select>
+
+    <select id="getValueById" resultType="com.yzs.crm.settings.pojo.DicValue">
+        select * from tbl_dic_value where id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into tbl_dic_value(id,value,text,orderNo,typeCode) values (#{id},#{value},#{text},#{orderNo},#{typeCode})
+    </insert>
+
+    <delete id="delete">
+        delete from tbl_dic_value
+        <if test="list != null and list.size > 0">
+            where id in
+            <foreach collection="list" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <update id="update">
+        update tbl_dic_value set value = #{value}, text = #{text}, orderNo = #{orderNo},typeCode = #{typeCode} where id = #{id}
+    </update>
+
+</mapper>

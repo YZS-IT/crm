@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzs.crm.workbench.dao.IActivityDao">
+
+    <sql id="selectAll">
+        select a.id,b.name as owner,a.name,a.startDate,a.endDate,a.cost,a.description,a.createTime,a.createBy,a.editTime,a.editBy from tbl_activity a join tbl_user b on a.owner = b.id
+    </sql>
+
+    <select id="findAll" resultType="com.yzs.crm.workbench.pojo.Activity">
+        <include refid="selectAll" />
+        <where>
+            <if test="owner != null and owner != ''">
+                <![CDATA[AND b.name LIKE '%' #{owner} '%']]>
+            </if>
+            <if test="name != null and name != ''">
+                <![CDATA[AND a.name LIKE '%' #{name} '%']]>
+            </if>
+            <if test="startDate != null and startDate != ''">
+                <![CDATA[AND startDate >= #{startDate}]]>
+            </if>
+            <if test="endDate != null and endDate != ''">
+                <![CDATA[AND endDate =< #{endDate}]]>
+            </if>
+        </where>
+        order by a.startDate desc,a.createTime desc
+    </select>
+
+    <select id="findByOwner" resultType="com.yzs.crm.workbench.pojo.Activity">
+        select id,owner,name,startDate,endDate,cost,description,createTime,createBy,editTime,editBy from tbl_activity
+        where owner = #{owner}
+    </select>
+
+    <select id="findById" resultType="com.yzs.crm.workbench.pojo.Activity">
+        select id,owner,name,startDate,endDate,cost,description,createTime,createBy,editTime,editBy from tbl_activity
+        where id = #{id}
+    </select>
+
+    <select id="detail" resultType="com.yzs.crm.workbench.pojo.Activity">
+        <include refid="selectAll" />
+        where a.id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into tbl_activity(id,owner,name,startDate,endDate,cost,description,createTime,createBy)
+            values (#{id},#{owner},#{name},#{startDate},#{endDate},#{cost},#{description},#{createTime},#{createBy})
+    </insert>
+
+    <update id="update">
+        update tbl_activity set owner = #{owner},name = #{name},startDate = #{startDate},endDate = #{endDate},cost = #{cost},description = #{description},editTime = #{editTime},editBy = #{editBy}
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from tbl_activity
+        <if test="list != null and list.size > 0">
+            where id in
+            <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <select id="findLikeNameNotInRelation" resultType="com.yzs.crm.workbench.pojo.Activity">
+        <include refid="selectAll" />
+        <where>
+            <if test="name != null and name != ''">
+                <![CDATA[AND a.name LIKE '%' #{name} '%']]>
+            </if>
+            and a.id not in (select activityId from tbl_clue_activity_relation where clueId = #{clueId})
+        </where>
+        order by a.startDate desc,a.createTime desc
+    </select>
+
+</mapper>
